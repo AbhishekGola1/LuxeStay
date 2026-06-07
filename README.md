@@ -97,6 +97,13 @@ LuxeStay/
 * Implemented RESTful APIs with MVC architecture
 * Designed responsive UI for seamless cross-device experience
 
+## Features can be added in future
+
+* AI-Powered Enhancements
+* Advanced Booking & Payment Features
+* Enhanced Guest Experience (UX)
+* Technical & Performance Optimization
+
 ## Author
 
 **Abhishek Gola**
