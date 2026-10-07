@@ -30,6 +30,23 @@ router
     .get(userController.renderLoginForm)                          // login form
     .post(saveRedirectUrl, passport.authenticate("local", { failureRedirect: "/login", failureFlash: true }), userController.login);          // login logic
 
+router.post(
+    "/demo-login",
+    (req, res, next) => {
+        if (!process.env.DEMO_PASSWORD) {
+            req.flash("error", "Demo login is not configured for this site.");
+            return res.redirect("/login");
+        }
+        req.body = { username: "luxestay-demo", password: process.env.DEMO_PASSWORD };
+        return next();
+    },
+    passport.authenticate("local", {
+        failureRedirect: "/login",
+        failureFlash: "Demo login is temporarily unavailable.",
+    }),
+    userController.demoLogin,
+);
+
 
 
 //login routes
