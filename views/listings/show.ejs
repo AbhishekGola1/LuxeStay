@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+  <% if(currUser && !currUser.isDemo && listing.owner && listing.owner._id.equals(currUser._id)) { %>
   <div class="btns listing-actions col-12 col-lg-8 offset-lg-2">
     <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn">Edit</a>
 
@@ -31,7 +31,7 @@
   
 
   <div class="col-12 col-lg-8 offset-lg-2 mb-3">
-    <% if(currUser) { %>
+    <% if (currUser && !currUser.isDemo) { %>
     <hr>
     <h4>Leave a Review</h4>
     <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
@@ -63,6 +63,9 @@
     </form>
     <hr>
     <% } %>
+    <% if (currUser && currUser.isDemo) { %>
+      <p class="alert alert-info">The demo account is read-only, so reviews and listing changes are disabled.</p>
+    <% } %>
     
     <% if(listing.reviews.length > 0 ) { %>
     <div class="row">
@@ -73,7 +76,7 @@
             <h5 class="card-title">@<%= review.author ? review.author.username : "Former guest" %></h5>
             <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
             <p class="card-text"><%= review.comment %></p>
-            <% if (currUser && review.author && review.author._id.equals(currUser._id)) { %>
+            <% if (currUser && !currUser.isDemo && review.author && review.author._id.equals(currUser._id)) { %>
               <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
                 <button class="btn btn-sm btn-dark">Delete</button>
               </form>
