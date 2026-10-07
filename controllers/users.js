@@ -1,17 +1,10 @@
 const User = require("../models/user");
+const crypto = require("crypto");
 
 const DEMO_USERNAME = "luxestay-demo";
 const DEMO_EMAIL = "demo@luxestay.invalid";
 
 module.exports.ensureDemoAccount = async () => {
-    const password = process.env.DEMO_PASSWORD;
-    if (!password) {
-        return false;
-    }
-    if (password.length < 12) {
-        throw new Error("DEMO_PASSWORD must be at least 12 characters long.");
-    }
-
     let demoUser = await User.findOne({ username: DEMO_USERNAME });
     if (demoUser) {
         if (!demoUser.isDemo) {
@@ -21,6 +14,10 @@ module.exports.ensureDemoAccount = async () => {
     }
 
     try {
+        const password = process.env.DEMO_PASSWORD || crypto.randomBytes(32).toString("hex");
+        if (password.length < 12) {
+            throw new Error("DEMO_PASSWORD must be at least 12 characters long.");
+        }
         demoUser = await User.register(
             new User({ username: DEMO_USERNAME, email: DEMO_EMAIL, isDemo: true }),
             password,
@@ -76,9 +73,19 @@ module.exports.login = (req, res) => {
     res.redirect(redirectUrl);
 };
 
-module.exports.demoLogin = (req, res) => {
-    req.flash("success", "You are using the read-only demo account.");
-    res.redirect("/listings");
+module.exports.demoLogin = async (req, res, next) => {
+    const demoUser = await User.findOne({ username: DEMO_USERNAME, isDemo: true });
+    if (!demoUser) {
+        throw new Error("The demo account has not been initialized.");
+    }
+
+    req.login(demoUser, (err) => {
+        if (err) {
+            return next(err);
+        }
+        req.flash("success", "You are using the read-only demo account.");
+        return res.redirect("/listings");
+    });
 };
 
 module.exports.logout = (req, res, next) => {
