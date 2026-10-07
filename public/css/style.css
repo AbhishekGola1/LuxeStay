@@ -292,7 +292,7 @@ p,
     overflow-wrap: anywhere;
 }
 
-.show-img {
+.show-card .show-img {
     width: 100%;
     max-height: min(65vh, 42rem);
     aspect-ratio: 16 / 10;
@@ -356,7 +356,7 @@ p,
     --bs-gutter-x: 1rem;
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 1199.98px) {
     .navbar {
         padding-block: 0.35rem;
     }
