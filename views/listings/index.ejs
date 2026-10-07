@@ -5,35 +5,6 @@
     <button>Create New Listing</button>
 </form> -->
 
-<style>
-    #filters {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .filter {
-        text-align: center;
-        margin-right: 2rem;
-        margin-top: 2rem;
-        opacity: 0.7;
-    }
-
-    .filter:hover {
-        opacity: 1;
-        cursor: pointer;
-    }
-
-    .filter p {
-        font-size: 0.8rem;
-    }
-
-    .tax-info {
-        display: none;
-    }
-
-</style>
-
 <div id="filters">
     <div class="filter">
         <div><i class="fa-solid fa-fire"></i></div>
@@ -81,7 +52,7 @@
     </div>
 
     <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
+        <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="flexswitchCheckDefault">
             <label class="form-check-label" for="flexswitchCheckDefault">Display total after taxes</label>
         </div>
@@ -89,12 +60,12 @@
 
 </div>
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-    <% for(let listing of allListings) { %>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 listings-grid mt-3">
+    <% for (const listing of allListings) { %>
     <div class="col">
       <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card listing-card h-100">
-            <img src="<%= listing.image && listing.image.url ? listing.image.url : '' %>" class="card-img-top" alt="<%= listing.title %>" loading="lazy">
+        <div class="card listing-card">
+            <img src="<%= listing.image && listing.image.url ? listing.image.url : '' %>" class="card-img-top" alt="Stay: <%= listing.title %>" loading="lazy">
             <div class="card-img-overlay"></div>
             <div class="card-body">
                 <p class="card-text">
