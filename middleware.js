@@ -13,6 +13,14 @@ module.exports.isLoggedIn = (req, res, next) => {
     return next();
 };
 
+module.exports.blockDemoWrites = (req, res, next) => {
+    if (req.user?.isDemo) {
+        req.flash("error", "The demo account is read-only.");
+        return res.redirect("/listings");
+    }
+    return next();
+};
+
 
 module.exports.saveRedirectUrl = (req, res, next) => {
     if (req.session.redirectUrl) {
@@ -77,4 +85,3 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     }
     return next();
 };
-
