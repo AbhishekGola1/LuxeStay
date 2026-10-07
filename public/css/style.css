@@ -1,50 +1,104 @@
+:root {
+    color-scheme: light;
+    --brand-color: #fe424d;
+    --text-color: #222;
+    --surface-color: #fff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: "Plus Jakarta Sans", sans-serif !important;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    overflow-x: hidden;
+    color: var(--text-color);
+    font-family: "Plus Jakarta Sans", sans-serif !important;
 }
 
+main,
 .container {
-    flex: 1;
+    flex: 1 0 auto;
 }
 
-/* Navbar */
 .navbar {
-    height: 5rem;
-    background-color: white;
+    min-height: 5rem;
+    background-color: var(--surface-color);
+}
+
+.navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    font-weight: 700;
 }
 
 .fa-compass {
-    color: #fe424d;
+    color: var(--brand-color);
     font-size: 2rem;
 }
 
 .nav-link {
-    color: #222222 !important;
+    color: var(--text-color) !important;
+}
+
+.navbar-search {
+    width: min(100%, 30rem);
+    gap: 0.5rem;
+}
+
+.search-btn {
+    flex: 0 0 auto;
+    border-radius: 25px;
+    padding-inline: 1rem;
+    background-color: var(--brand-color);
+    color: #fff;
+}
+
+.search-btn:hover,
+.search-btn:focus-visible {
+    background-color: #e6323d;
+    color: #fff;
+}
+
+.search-btn i {
+    margin-right: 0.5rem;
+}
+
+.search-inp {
+    min-width: 0;
+    border-radius: 25px;
+    padding-inline: 1rem;
 }
 
 /* Footer */
 .f-info {
-    text-align: center;
-    height: 8rem;
+    min-height: 8rem;
+    padding: 1rem;
     background-color: #ebebeb;
+    text-align: center;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: space-evenly;
+    align-items: center;
 }
 
 .f-info-links a {
+    margin: 0 0.5rem;
+    color: var(--text-color);
     text-decoration: none;
-    color: #222222;
 }
 
 .f-info-links a:hover {
     text-decoration: underline;
 }
 
-.f-info-links, .f-info-socials, .f-info-brand {
+.f-info-links,
+.f-info-socials,
+.f-info-brand {
     width: 100%;
     display: flex;
     align-items: center;
@@ -52,74 +106,141 @@ body {
 }
 
 .f-info-socials i {
+    margin: 0 0.5rem;
     font-size: 1.2rem;
-    margin-right: 1rem;
 }
 
-/* Cards */
+/* Listings */
+#filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter {
+    min-width: 4.5rem;
+    margin-top: 1rem;
+    text-align: center;
+    opacity: 0.72;
+}
+
+.filter:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.filter p {
+    margin-bottom: 0;
+    font-size: 0.8rem;
+}
+
+.tax-toggle {
+    min-height: 3.25rem;
+    margin: 1rem 0 0 auto;
+    padding: 0.75rem 1rem;
+    border: 1px solid #adb5bd;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+}
+
 .listing-card {
-    border: none !important;
     margin-bottom: 2rem;
+    overflow: hidden;
+    border: 0 !important;
 }
 
-.card-img-top {
-    border-radius: 1rem !important;
-    width: 100% !important;
-    object-fit: cover !important;
+.listing-card .card-img-top {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
 }
 
-.card-body {
-    padding: 0 !important;
-}
-
-.card-text p {
-    font-weight: 400;
+.listing-card .card-body {
+    padding: 0.75rem 0 0 !important;
 }
 
 .listing-link {
+    display: block;
+    height: 100%;
+    color: inherit;
     text-decoration: none;
 }
 
-/* Card Effect */
+.listing-link:hover .card-img-top {
+    filter: brightness(0.96);
+}
+
 .card-img-overlay {
-    opacity: 0;
+    pointer-events: none;
 }
 
-.card-img-overlay:hover {
-    opacity: 0.2;
-    background-color: white;
+.tax-info {
+    display: none;
 }
 
-/* New Page */
-.add-btn {
-    background-color: #fe424d !important;
-    border: none !important;
-}
-
-/* Edit Page */
+.add-btn,
 .edit-btn {
-    background-color: #fe424d !important;
     border: none !important;
-}
-
-/* Show Page */
-.show-img {
-    height: 30vh;
-}
-
-.btns {
-    display: flex;
+    background-color: var(--brand-color) !important;
 }
 
 .show-card {
-    padding-left: 0;
-    padding-left: 0;
+    padding: 0;
 }
 
+.show-img {
+    width: 100%;
+    max-height: 65vh;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
 
-/* Map */
+.listing-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
 
-/* #map {
-    height: 100px;
-    width: 100px;
-} */
+.listing-edit-image {
+    max-width: 100%;
+    max-height: 18rem;
+    object-fit: contain;
+}
+
+.starability-slot {
+    max-width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .navbar {
+        padding-block: 0.5rem;
+    }
+
+    .navbar-collapse {
+        padding: 0.75rem 0;
+        background: var(--surface-color);
+    }
+
+    .navbar-search {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .f-info {
+        min-height: 7rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .tax-toggle {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .listing-card {
+        margin-bottom: 1.25rem;
+    }
+}
