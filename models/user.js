@@ -6,7 +6,11 @@ const userSchema = new Schema({                                       //4. defin
     email: {
         type: String,
         required: true,
-    }
+    },
+    isDemo: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 userSchema.plugin(passportLocalMongoose.default);                                     //5. Ye line passport-local-mongoose plugin ko User schema par apply karti hai, jisse automatically username/password fields, password hashing, authentication methods (register, login) add ho jate hain
