@@ -21,12 +21,22 @@
           <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
       </form>
       <div class="navbar-nav ms-md-auto">
-        <a class="nav-link" href="/listings/new">Airbnb Your Home</a>
-        <% if(!currUser) { %>
+        <% if (!currUser || !currUser.isDemo) { %>
+          <a class="nav-link" href="/listings/new">Airbnb Your Home</a>
+        <% } %>
+        <% if (!currUser) { %>
           <a class="nav-link" href="/signup"><b>Sign up</b></a>
           <a class="nav-link" href="/login"><b>Log in</b></a>
+          <% if (demoLoginEnabled) { %>
+            <form action="/demo-login" method="POST" class="d-flex align-items-center">
+              <button class="btn btn-outline-danger btn-sm" type="submit">Try demo</button>
+            </form>
+          <% } %>
         <% } %>
-        <% if(currUser) { %>
+        <% if (currUser && currUser.isDemo) { %>
+          <span class="nav-link text-muted">Read-only demo</span>
+        <% } %>
+        <% if (currUser) { %>
           <a class="nav-link" href="/logout">Log out</a>
         <% } %>
       </div>
