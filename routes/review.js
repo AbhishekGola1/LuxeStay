@@ -4,7 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js");         //3. importing wrapA
 const ExpressError = require("../utils/ExpressError.js");            //4. importing ExpressError utility class for custom error handling
 const Review = require("../models/review.js");                //6. Ye line "Review" model ko import karti hai, jiska use reviews ke liye hota hai, taaki hum reviews ko database me store kar sake aur unhe listings ke saath associate kar sake
 const Listing = require("../models/listing.js");          //7. importing listing model to interact with listings collection in database
-const { validateReview, isLoggedIn, isReviewAuthor } = require("../middleware.js");
+const { validateReview, isLoggedIn, isReviewAuthor, blockDemoWrites } = require("../middleware.js");
 
 
 //requiring review controller
@@ -12,10 +12,10 @@ const reviewController = require("../controllers/reviews.js");
 
 
 //Post Review Route
-router.post("/", isLoggedIn, validateReview, wrapAsync(reviewController.createReview));
+router.post("/", isLoggedIn, blockDemoWrites, validateReview, wrapAsync(reviewController.createReview));
 
 //Delete Review Route
-router.delete("/:reviewId", isLoggedIn, isReviewAuthor, wrapAsync(reviewController.destroyReview));
+router.delete("/:reviewId", isLoggedIn, blockDemoWrites, isReviewAuthor, wrapAsync(reviewController.destroyReview));
 
 
 module.exports = router;                                         // router object ko export karna taaki usse app.js me import karke use kiya ja sake
