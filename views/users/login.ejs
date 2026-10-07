@@ -1,9 +1,9 @@
 <% layout("/layouts/boilerplate") %>
 
 <div class="row mt-3">
-    <h1 class="col-12 col-md-8 offset-md-2">Login</h1>
+    <h1 class="col-12 col-md-8 offset-md-2 page-heading">Login</h1>
     <div class="col-12 col-md-8 offset-md-2">
-        <form action="/login" method="POST" class="needs-validation" novalidate>
+        <form action="/login" method="POST" class="needs-validation page-form" novalidate>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input
@@ -28,6 +28,14 @@
 
             <button class="btn btn-success">Login</button>
         </form>
-
+        <% if (demoLoginEnabled) { %>
+            <div class="my-4 p-3 border rounded">
+                <h2 class="h5">Just looking around?</h2>
+                <p class="mb-3">Explore with a shared read-only demo account. No password needed.</p>
+                <form action="/demo-login" method="POST" class="page-form">
+                    <button class="btn btn-outline-danger" type="submit">Continue as demo</button>
+                </form>
+            </div>
+        <% } %>
     </div>
 </div>

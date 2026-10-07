@@ -2,13 +2,13 @@
 
 <div class="row mt-3">
   <div class="col-12 col-lg-8 offset-lg-2">
-    <h3><%= listing.title %></h3>
+    <h1 class="show-heading h3"><%= listing.title %></h1>
   </div>
   <div class="card col-12 col-lg-8 offset-lg-2 show-card listing-card">
     <img
       src="<%= listing.image && listing.image.url ? listing.image.url : '' %>"
       class="card-img-top show-img"
-      alt="listing_image"
+      alt="Stay: <%= listing.title %>"
     />
     <div class="card-body">
       <p class="card-text">Owned by <i><%= listing.owner ? listing.owner.username : "Former host" %></i></p>
@@ -34,7 +34,7 @@
     <% if (currUser && !currUser.isDemo) { %>
     <hr>
     <h4>Leave a Review</h4>
-    <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+    <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation page-form">
       
       <div class="mb-3 mt-3">
         <label for="rating" class="form-label">Rating</label>
@@ -68,10 +68,10 @@
     <% } %>
     
     <% if(listing.reviews.length > 0 ) { %>
-    <div class="row">
-      <p><b>All Reviews</b></p>
+    <div class="row reviews-grid">
+      <p class="col-12 mb-0"><b>All Reviews</b></p>
       <% for (const review of listing.reviews) { %>
-        <div class="card col-12 col-md-5 ms-md-3 mb-3">
+        <div class="card col-12 col-md-6 review-card">
           <div class="card-body">
             <h5 class="card-title">@<%= review.author ? review.author.username : "Former guest" %></h5>
             <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
