@@ -1,9 +1,19 @@
 const Listing = require("../models/listing");
+const ExpressError = require("../utils/ExpressError.js");
 
 
 module.exports.index = async (req, res) => {          // Ye route "/listings" par aane wali GET request ko handle karta hai
-    const allListings = await Listing.find({});                // Ye database se saare listings fetch karke "allListings" variable me store karta hai
-    res.render("listings/index.ejs", { allListings });       // Ye "index.ejs" page ko render karta hai aur usme allListings data pass karta hai taaki wo browser me display ho sake
+    const searchTerm = typeof req.query.q === "string" ? req.query.q.trim() : "";
+    const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const filter = escapedSearchTerm
+        ? {
+            $or: ["title", "description", "location", "country"].map((field) => ({
+                [field]: { $regex: escapedSearchTerm, $options: "i" },
+            })),
+        }
+        : {};
+    const allListings = await Listing.find(filter);
+    res.render("listings/index.ejs", { allListings, searchTerm });
 };
 
 module.exports.renderNewForm = (req, res) => {                // Ye route "/listings/new" par aane wali GET request ko handle karta hai (nayi listing create karne ke page ke liye)
@@ -17,13 +27,14 @@ module.exports.showListing = async (req, res) => {                // Ye route "/
         req.flash("error", "Listing you requested for does not exists!");
         return res.redirect("/listings");
     };
-    console.log(listing);
     res.render("listings/show.ejs", { listing });                    // Ye "show.ejs" page ko render karta hai aur usme listing data bhejta hai taaki browser me display ho sake 
 };
 
 module.exports.createListing = async (req, res, next) => {                                         // Ye route "/listings" par aane wali POST request ko handle karta hai (nayi listing create karne ke liye)
-    let url = req.file.path;
-    let filename = req.file.filename;
+    if (!req.file) {
+        throw new ExpressError(400, "Please upload a listing image.");
+    }
+    const { path: url, filename } = req.file;
 
     const newListing = new Listing(req.body.listing);                               // Ye request body se aane wale data ko use karke ek naya Listing object banata hai
     newListing.owner = req.user._id;
@@ -41,19 +52,20 @@ module.exports.renderEditForm = async (req, res) => {                      // Ye
         return res.redirect("/listings");
     };
 
-    let originalImageUrl = listing.image.url;
-    originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
+    const originalImageUrl = listing.image?.url?.replace("/upload", "/upload/w_600") || "";
 
     res.render("listings/edit.ejs", { listing, originalImageUrl });                    // Ye "edit.ejs" page ko render karta hai aur usme listing data bhejta hai taaki form me existing data show ho aur user usse edit kar sake
 };
 
 module.exports.updateListing = async (req, res) => {                         // Ye route "/listings/:id" par aane wali PUT request ko handle karta hai (existing listing ko update karne ke liye)
     let { id } = req.params;
-    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });       // Ye database me us specific listing ko update karta hai, jisme req.body.listing ke saare fields spread operator (...) se pass kiye ja rahe hain
+    const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }, { runValidators: true });
+    if (!listing) {
+        throw new ExpressError(404, "Listing not found.");
+    }
     
     if(typeof req.file !== "undefined") {
-        let url = req.file.path;
-        let filename = req.file.filename;
+        const { path: url, filename } = req.file;
         listing.image = { url, filename };
         await listing.save();
     }
@@ -64,8 +76,10 @@ module.exports.updateListing = async (req, res) => {                         // 
 
 module.exports.destroyListing = async (req, res) => {
     let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
+    const deletedListing = await Listing.findByIdAndDelete(id);
+    if (!deletedListing) {
+        throw new ExpressError(404, "Listing not found.");
+    }
     req.flash("success", "Listing deleted!");
     res.redirect("/listings");
 };
