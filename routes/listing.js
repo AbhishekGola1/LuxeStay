@@ -5,7 +5,17 @@ const wrapAsync = require("../utils/wrapAsync.js");         //4. importing wrapA
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");         // importing isLoggedIn middleware to check if user is logged in
 const multer = require("multer");                                                      // importing multer module to handle file uploads
 const { storage } = require("../cloudConfig.js");
-const upload = multer({ storage });                                               // creating a multer middleware to handle file uploads and multer will save the file in cloudinary storage
+const ExpressError = require("../utils/ExpressError.js");
+const upload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, callback) => {
+        if (!["image/jpeg", "image/png"].includes(file.mimetype)) {
+            return callback(new ExpressError(400, "Upload a JPEG or PNG image."));
+        }
+        return callback(null, true);
+    },
+});
 
 
 //requiring listing controller
