@@ -21,6 +21,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const { ensureDemoAccount } = require("./controllers/users.js");
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
@@ -28,6 +29,7 @@ const userRouter = require("./routes/user.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.locals.demoLoginEnabled = Boolean(process.env.DEMO_PASSWORD);
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
@@ -35,6 +37,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 async function start() {
     await mongoose.connect(process.env.ATLASDB_URL);
+    await ensureDemoAccount();
 
     const store = MongoStore.create({
         clientPromise: Promise.resolve(mongoose.connection.getClient()),
