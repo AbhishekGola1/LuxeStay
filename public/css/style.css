@@ -94,6 +94,11 @@ body {
     padding: 0.25rem 0.5rem;
 }
 
+.navbar-demo-quick {
+    margin-left: auto;
+    padding-inline: 0.25rem;
+}
+
 .navbar .navbar-toggler {
     min-width: 44px;
     min-height: 44px;
@@ -457,6 +462,15 @@ p,
     .navbar-brand {
         gap: 0.3rem;
         font-size: 1rem;
+    }
+
+    .navbar-demo-quick {
+        padding-inline: 0.15rem;
+    }
+
+    .navbar-demo-quick .btn {
+        padding-inline: 0.5rem;
+        font-size: 0.8rem;
     }
 
     .navbar-search {
